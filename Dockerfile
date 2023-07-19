@@ -2,27 +2,18 @@
 # Docker configuration for P4D
 # --------------------------------------------------------------------------------
 
-FROM ubuntu:focal
-
-LABEL vendor="Sourcegraph"
-LABEL maintainer="Joe Chen (joe@sourcegraph.com)"
+FROM ubuntu:jammy
 
 # Update Ubuntu and add Perforce Package Source
-RUN \
-  apt-get update && \
-  apt-get install -y wget gnupg2 && \
-  wget -qO - https://package.perforce.com/perforce.pubkey | apt-key add - && \
-  echo "deb http://package.perforce.com/apt/ubuntu focal release" > /etc/apt/sources.list.d/perforce.list && \
-  apt-get update
+RUN apt-get update && apt-get install -y wget gnupg2
 
-# --------------------------------------------------------------------------------
-# Docker BUILD
-# --------------------------------------------------------------------------------
 
-# Create perforce user and install Perforce Server
-RUN \
-  apt-get install -y helix-p4d=2020.2-2075706~focal && \
-  apt-get install -y helix-swarm-triggers=2020.2-2065513~focal
+RUN wget -qO - https://package.perforce.com/perforce.pubkey | gpg --dearmor | tee /etc/apt/trusted.gpg.d/perforce.gpg
+RUN echo "deb https://package.perforce.com/apt/ubuntu jammy release" > /etc/apt/sources.list.d/perforce.list
+
+RUN apt-get update && apt-get install -y \
+      helix-p4d=2023.1-2442900~jammy \
+      helix-swarm-triggers=2023.2-2458885~jammy
 
 # Add external files
 COPY files/restore.sh /usr/local/bin/restore.sh

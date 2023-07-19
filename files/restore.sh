@@ -2,14 +2,14 @@
 
 ## Test for latest link
 if [ ! -L "$P4CKP/latest" ]; then
-	echo "Link not found - looking for checkpoint"
-	/usr/local/bin/latest_checkpoint.sh
+  echo "Link not found - looking for checkpoint"
+  latest_checkpoint.sh
 fi
 
 ## Test Checkpoint exists
 if [ ! -L "$P4CKP/latest" ]; then
-	echo "Error: Checkpoint for link $P4CKP/latest not found."
-	exit 255
+  echo "Error: Checkpoint for link $P4CKP/latest not found."
+  exit 255
 fi
 
 ## Stop Perforce
@@ -20,7 +20,7 @@ fi
 rm -rf $P4ROOT/*
 
 ## Set server name
-echo $P4NAME > $P4ROOT/server.id
+echo $P4NAME >$P4ROOT/server.id
 
 ## Restore and Upgrade Checkpoint
 p4d $P4CASE -r $P4ROOT -jr -z $P4CKP/latest
