@@ -28,7 +28,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: leocov/helix-p4d
-          tags: type=semver,pattern={{raw}}
+          tags: type=match,pattern=.*
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
